@@ -27,7 +27,7 @@ public class PedidoService {
 
     public List<PedidoDto> obterTodos() {
         return repository.findAll().stream()
-                .map(p -> modelMapper.map(p, PedidoDto.class))
+                .map(PedidoDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
@@ -35,7 +35,7 @@ public class PedidoService {
         Pedido pedido = repository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
-        return modelMapper.map(pedido, PedidoDto.class);
+        return PedidoDto.fromEntity(pedido);
     }
 
     public PedidoDto criarPedido(PedidoDto dto) {
@@ -46,7 +46,7 @@ public class PedidoService {
         pedido.getItens().forEach(item -> item.setPedido(pedido));
         Pedido salvo = repository.save(pedido);
 
-        return modelMapper.map(pedido, PedidoDto.class);
+        return PedidoDto.fromEntity(pedido);
     }
 
     public PedidoDto atualizaStatus(Long id, StatusDto dto) {
@@ -56,9 +56,9 @@ public class PedidoService {
             throw new EntityNotFoundException();
         }
 
-        pedido.setStatus(dto.getStatus());
-        repository.atualizaStatus(dto.getStatus(), pedido);
-        return modelMapper.map(pedido, PedidoDto.class);
+        pedido.setStatus(dto.status());
+        repository.atualizaStatus(dto.status(), pedido);
+        return PedidoDto.fromEntity(pedido);
     }
 
     public void aprovaPagamentoPedido(Long id) {
