@@ -2,18 +2,15 @@ package br.com.food.pedidos.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.*;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class ItemDoPedidoDto {
+public record ItemDoPedidoDto(
+        Long id,
 
-    private Long id;
+        @NotNull
+        @Positive
+        Integer quantidade,
+        String descricao
 
-    @NotNull
-    @Positive
-    private Integer quantidade;
-    private String descricao;
+) {
+
 }
