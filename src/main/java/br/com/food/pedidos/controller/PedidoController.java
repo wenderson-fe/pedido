@@ -1,5 +1,6 @@
 package br.com.food.pedidos.controller;
 
+import br.com.food.pedidos.dto.PedidoCriacaoDto;
 import br.com.food.pedidos.dto.PedidoDto;
 import br.com.food.pedidos.dto.StatusDto;
 import br.com.food.pedidos.service.PedidoService;
@@ -34,7 +35,7 @@ public class PedidoController {
     }
 
     @PostMapping()
-    public ResponseEntity<PedidoDto> realizaPedido(@RequestBody @Valid PedidoDto dto, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<PedidoDto> realizaPedido(@RequestBody @Valid PedidoCriacaoDto dto, UriComponentsBuilder uriBuilder) {
         PedidoDto pedidoRealizado = service.criarPedido(dto);
 
         URI endereco = uriBuilder.path("/pedidos/{id}").buildAndExpand(pedidoRealizado.id()).toUri();

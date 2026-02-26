@@ -1,17 +1,14 @@
 package br.com.food.pedidos.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 @Entity
 @Table(name = "item_do_pedido")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class ItemDoPedido {
     @Id
@@ -24,4 +21,9 @@ public class ItemDoPedido {
 
     @ManyToOne(optional = false)
     private Pedido pedido;
+
+    public ItemDoPedido(Integer quantidade, String descricao) {
+        this.quantidade = quantidade;
+        this.descricao = descricao;
+    }
 }

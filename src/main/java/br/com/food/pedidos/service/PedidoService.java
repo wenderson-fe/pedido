@@ -1,17 +1,20 @@
 package br.com.food.pedidos.service;
 
+import br.com.food.pedidos.dto.PedidoCriacaoDto;
 import br.com.food.pedidos.dto.PedidoDto;
 import br.com.food.pedidos.dto.StatusDto;
+import br.com.food.pedidos.model.ItemDoPedido;
 import br.com.food.pedidos.model.Pedido;
 import br.com.food.pedidos.model.Status;
+import br.com.food.pedidos.model.exception.PedidoException;
 import br.com.food.pedidos.repository.PedidoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,15 +41,20 @@ public class PedidoService {
         return PedidoDto.fromEntity(pedido);
     }
 
-    public PedidoDto criarPedido(PedidoDto dto) {
-        Pedido pedido = modelMapper.map(dto, Pedido.class);
+    @Transactional
+    public PedidoDto criarPedido(PedidoCriacaoDto pedidoDto) {
+        if (pedidoDto.itens() == null || pedidoDto.itens().isEmpty()) {
+            throw new PedidoException("Não é possível criar um pedido sem itens!");
+        }
 
-        pedido.setDataHora(LocalDateTime.now());
-        pedido.setStatus(Status.REALIZADO);
-        pedido.getItens().forEach(item -> item.setPedido(pedido));
-        Pedido salvo = repository.save(pedido);
+        List<ItemDoPedido> itens = pedidoDto.itens().stream()
+                .map(dto -> new ItemDoPedido(dto.quantidade(), dto.descricao()))
+                .toList();
 
-        return PedidoDto.fromEntity(pedido);
+        Pedido pedido = new Pedido(Status.REALIZADO, itens);
+        Pedido pedidoSalvo = repository.save(pedido);
+
+        return PedidoDto.fromEntity(pedidoSalvo);
     }
 
     public PedidoDto atualizaStatus(Long id, StatusDto dto) {

@@ -2,10 +2,7 @@ package br.com.food.pedidos.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,7 +12,7 @@ import java.util.List;
 @Table(name = "pedidos")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Pedido {
 
@@ -30,6 +27,19 @@ public class Pedido {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "pedido")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pedido", orphanRemoval = true)
     private List<ItemDoPedido> itens = new ArrayList<>();
+
+    public Pedido(Status status, List<ItemDoPedido> itens) {
+        this.dataHora = LocalDateTime.now();
+        this.status = status;
+        adicionarItens(itens);
+    }
+
+    public void adicionarItens(List<ItemDoPedido> itens) {
+        itens.forEach(item -> {
+            item.setPedido(this);
+            this.itens.add(item);
+        });
+    }
 }
