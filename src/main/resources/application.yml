@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: pedidos-api
+  datasource:
+    url: jdbc:mysql://${DB_HOST_PEDIDOS}/${DB_NAME_PEDIDOS}?createDatabaseIfNotExist=true
+    username: ${DB_USER_PEDIDOS}
+    password: ${DB_PASSWORD_PEDIDOS}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+eureka:
+  client:
+    serviceUrl:
+      # URL do Eureka Server.
+      # O cliente utiliza esse endereço para localizar o Service Registry
+      defaultZone: http://localhost:8081/eureka
+  instance:
+    # Define um identificador único para cada instância do serviço no Eureka,
+    # combinando o nome da aplicação com um valor aleatório.
+    instanceId: ${spring.application.name}:${random.int}
+
+server:
+  # Porta em que a aplicação será executada.
+  # Ao usar "0", o Spring Boot atribui automaticamente uma porta aleatória disponível no sistema.
+  port: 0
