@@ -20,6 +20,7 @@ public class ItemDoPedido {
     private String descricao;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "pedido_id")
     private Pedido pedido;
 
     public ItemDoPedido(Integer quantidade, String descricao) {
