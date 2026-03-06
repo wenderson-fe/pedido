@@ -28,7 +28,7 @@ public class PedidoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoDto> listarPorId(@PathVariable @NotNull Long id) {
+    public ResponseEntity<PedidoDto> listarPorId(@PathVariable Long id) {
         PedidoDto dto = service.obterPorId(id);
 
         return ResponseEntity.ok(dto);
@@ -51,9 +51,8 @@ public class PedidoController {
         return ResponseEntity.ok(dto);
     }
 
-
     @PutMapping("/{id}/pago")
-    public ResponseEntity<Void> aprovaPagamento(@PathVariable @NotNull Long id) {
+    public ResponseEntity<Void> aprovaPagamento(@PathVariable Long id) {
         service.aprovaPagamentoPedido(id);
 
         return ResponseEntity.ok().build();
