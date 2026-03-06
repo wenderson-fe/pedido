@@ -1,11 +1,11 @@
 package br.com.food.pedidos.controller;
 
+import br.com.food.pedidos.controller.openapi.PedidoControllerOpenApi;
 import br.com.food.pedidos.dto.PedidoCriacaoDto;
 import br.com.food.pedidos.dto.PedidoDto;
 import br.com.food.pedidos.dto.StatusDto;
 import br.com.food.pedidos.service.PedidoService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pedidos")
-public class PedidoController {
+public class PedidoController implements PedidoControllerOpenApi{
 
     @Autowired
     private PedidoService service;
