@@ -10,7 +10,6 @@ import br.com.food.pedidos.model.exception.PedidoException;
 import br.com.food.pedidos.repository.PedidoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +21,6 @@ import java.util.stream.Collectors;
 public class PedidoService {
 
     private final PedidoRepository repository;
-
-    private final ModelMapper modelMapper;
 
     public List<PedidoDto> obterTodos() {
         return repository.findAll().stream()
