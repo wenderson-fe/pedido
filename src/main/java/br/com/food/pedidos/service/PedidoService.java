@@ -79,4 +79,12 @@ public class PedidoService {
         pedido.setStatus(Status.PAGO);
         repository.atualizaStatus(Status.PAGO, pedido);
     }
+
+    @Transactional
+    public void deletarPedido(Long id) {
+        Pedido pedido = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado com id: " + id));
+
+        repository.delete(pedido);
+    }
 }

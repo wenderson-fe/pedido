@@ -63,4 +63,12 @@ public class PedidoController {
     public String retornaPorta(@Value("${local.server.port}") String porta) {
         return String.format("Requisição respondida pela instância executando na porta %s", porta);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarPedido(@PathVariable Long id) {
+        service.deletarPedido(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
