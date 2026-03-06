@@ -11,7 +11,6 @@ import br.com.food.pedidos.repository.PedidoRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,10 +21,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PedidoService {
 
-    @Autowired
-    private PedidoRepository repository;
+    private final PedidoRepository repository;
 
-    @Autowired
     private final ModelMapper modelMapper;
 
     public List<PedidoDto> obterTodos() {
@@ -57,11 +54,12 @@ public class PedidoService {
         return PedidoDto.fromEntity(pedidoSalvo);
     }
 
+    @Transactional
     public PedidoDto atualizaStatus(Long id, StatusDto dto) {
         Pedido pedido = repository.porIdComItens(id);
 
         if (pedido == null) {
-            throw new EntityNotFoundException();
+            throw new EntityNotFoundException("Pedido não encontrado com id: " + id);
         }
 
         pedido.setStatus(dto.status());
@@ -69,11 +67,12 @@ public class PedidoService {
         return PedidoDto.fromEntity(pedido);
     }
 
+    @Transactional
     public void aprovaPagamentoPedido(Long id) {
         Pedido pedido = repository.porIdComItens(id);
 
         if (pedido == null) {
-            throw new EntityNotFoundException();
+            throw new EntityNotFoundException("Pedido não encontrado com id: " + id);
         }
 
         pedido.setStatus(Status.PAGO);
