@@ -23,23 +23,30 @@ public interface PedidoControllerOpenApi {
     @Operation(summary = "Busca um pedido pelo ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedido encontrado"),
-            @ApiResponse(responseCode = "404", description = "Pedido não encontrado", content = @Content)
+            @ApiResponse(responseCode = "404", ref = "NotFound")
     })
     ResponseEntity<PedidoDto> listarPorId(@Parameter(description = "ID do pedido", example = "1") Long id);
 
     @Operation(summary = "Registra um novo pedido no sistema")
-    @ApiResponse(responseCode = "201", description = "Pedido criado com sucesso")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Pedido criado com sucesso"),
+            @ApiResponse(responseCode = "400", ref = "BadRequest")
+    })
+
     ResponseEntity<PedidoDto> realizaPedido(PedidoCriacaoDto dto, UriComponentsBuilder uriBuilder);
 
     @Operation(summary = "Atualiza o status de um pedido")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Status atualizado com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
+            @ApiResponse(responseCode = "404", ref = "NotFound")
     })
     ResponseEntity<PedidoDto> atualizaStatus(@Parameter(description = "ID do pedido") Long id, StatusDto status);
 
     @Operation(summary = "Aprova o pagamento de um pedido")
-    @ApiResponse(responseCode = "200", description = "Pagamento aprovado com sucesso")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pagamento aprovado com sucesso"),
+            @ApiResponse(responseCode = "404", ref = "NotFound")
+    })
     ResponseEntity<Void> aprovaPagamento(@Parameter(description = "ID do pedido") Long id);
 
     @Operation(summary = "Endpoint de diagnóstico para verificar a porta da instância", hidden = true)
@@ -48,7 +55,7 @@ public interface PedidoControllerOpenApi {
     @Operation(summary = "Exclui um pedido definitivamente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Pedido removido com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Pedido não encontrado")
+            @ApiResponse(responseCode = "404", ref = "NotFound")
     })
     ResponseEntity<Void> deletarPedido(@Parameter(description = "ID do pedido") Long id);
 }
