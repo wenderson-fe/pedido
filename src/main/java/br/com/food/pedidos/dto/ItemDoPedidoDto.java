@@ -10,7 +10,7 @@ public record ItemDoPedidoDto(
         Long id,
 
         @NotNull
-        @Positive
+        @Positive(message = "A quantidade deve ser um número positivo")
         Integer quantidade,
         String descricao
 ) {
