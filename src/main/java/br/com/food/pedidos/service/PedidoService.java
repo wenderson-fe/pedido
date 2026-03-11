@@ -62,14 +62,10 @@ public class PedidoService {
 
     @Transactional
     public void aprovaPagamentoPedido(Long id) {
-        Pedido pedido = repository.porIdComItens(id);
-
-        if (pedido == null) {
-            throw new EntityNotFoundException("Pedido não encontrado com id: " + id);
-        }
+        Pedido pedido = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado com id: " + id));
 
         pedido.setStatus(Status.PAGO);
-        repository.atualizaStatus(Status.PAGO, pedido);
     }
 
     @Transactional

@@ -49,7 +49,7 @@ public class PedidoController implements PedidoControllerOpenApi{
         return ResponseEntity.ok(service.atualizaStatus(id, status));
     }
 
-    @PutMapping("/{id}/pago")
+    @PostMapping("/{id}/pago")
     public ResponseEntity<Void> aprovaPagamento(@PathVariable Long id) {
         service.aprovaPagamentoPedido(id);
 
