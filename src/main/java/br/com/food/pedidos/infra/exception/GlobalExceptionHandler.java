@@ -23,6 +23,15 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.detalhesDoErro(404, LocalDateTime.now(), mensagem));
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> tratarErroDeArgumento(IllegalArgumentException e) {
+        String mensagem = (e.getMessage() == null || e.getMessage().isBlank())
+                ? "Recurso não encontrado" : e.getMessage();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponse.detalhesDoErro(400, LocalDateTime.now(), mensagem));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> tratarErroEntradaInvalida(MethodArgumentNotValidException e) {
         List<ErrorValidationDetails> validationDetails = e.getFieldErrors().stream()

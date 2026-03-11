@@ -44,11 +44,9 @@ public class PedidoController implements PedidoControllerOpenApi{
 
     }
 
-    @PutMapping("/{id}/status")
+    @PatchMapping("/{id}/status")
     public ResponseEntity<PedidoDto> atualizaStatus(@PathVariable Long id, @RequestBody @Valid StatusDto status) {
-        PedidoDto dto = service.atualizaStatus(id, status);
-
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(service.atualizaStatus(id, status));
     }
 
     @PutMapping("/{id}/pago")

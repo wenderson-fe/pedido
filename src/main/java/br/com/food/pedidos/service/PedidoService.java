@@ -53,14 +53,10 @@ public class PedidoService {
 
     @Transactional
     public PedidoDto atualizaStatus(Long id, StatusDto dto) {
-        Pedido pedido = repository.porIdComItens(id);
+        Pedido pedido = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado com id: " + id));
 
-        if (pedido == null) {
-            throw new EntityNotFoundException("Pedido não encontrado com id: " + id);
-        }
-
-        pedido.setStatus(dto.status());
-        repository.atualizaStatus(dto.status(), pedido);
+        pedido.setStatus(Status.fromString(dto.status()));
         return PedidoDto.fromEntity(pedido);
     }
 

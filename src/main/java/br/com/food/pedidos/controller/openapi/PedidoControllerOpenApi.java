@@ -38,7 +38,8 @@ public interface PedidoControllerOpenApi {
     @Operation(summary = "Atualiza o status de um pedido")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Status atualizado com sucesso"),
-            @ApiResponse(responseCode = "404", ref = "NotFound")
+            @ApiResponse(responseCode = "404", ref = "NotFound"),
+            @ApiResponse(responseCode = "400", ref = "BadRequest")
     })
     ResponseEntity<PedidoDto> atualizaStatus(@Parameter(description = "ID do pedido") Long id, StatusDto status);
 
