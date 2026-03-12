@@ -18,6 +18,21 @@ eureka:
     # combinando o nome da aplicação com um valor aleatório.
     instanceId: ${spring.application.name}:${random.int}
 
+resilience4j:
+  circuitbreaker:
+    instances:
+      cancelaPagamento:
+        # Define o número de chamadas mais recentes consideradas
+        # no cálculo da taxa de falhas do Circuit Breaker.
+        slidingWindowSize: 3
+
+        # Define a quantidade mínima de chamadas registradas
+        # antes que o Circuit Breaker passe a avaliar a taxa de falhas.
+        minimumNumberOfCalls: 2
+
+        # Define o tempo em que o Circuit Breaker permanece no estado OPEN.
+        waitDurationInOpenState: 60s
+
 server:
   # Porta em que a aplicação será executada.
   # Ao usar "0", o Spring Boot atribui automaticamente uma porta aleatória disponível no sistema.
