@@ -1,5 +1,6 @@
 package br.com.food.pedidos.infra.exception;
 
+import br.com.food.pedidos.model.exception.PedidoException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,13 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ErrorResponse.detalhesDoErro(400, LocalDateTime.now(), mensagem));
+    }
+
+    @ExceptionHandler(PedidoException.class)
+    public ResponseEntity<ErrorResponse> tratarRegraDeNogocio(PedidoException e) {
+
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(ErrorResponse.detalhesDoErro(422, LocalDateTime.now(), e.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

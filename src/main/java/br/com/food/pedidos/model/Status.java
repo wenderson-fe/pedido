@@ -8,7 +8,8 @@ public enum Status {
     CONFIRMADO("Confirmado"),
     PRONTO("Pronto"),
     SAIU_PARA_ENTREGA("SaiuParaEntrega"),
-    ENTREGUE("Entregue");
+    ENTREGUE("Entregue"),
+    CANCELAMENTO_PENDENTE("CancelamentoPendente");
 
     private final String descricao;
 
