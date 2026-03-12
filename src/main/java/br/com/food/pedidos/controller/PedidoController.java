@@ -61,11 +61,10 @@ public class PedidoController implements PedidoControllerOpenApi{
         return String.format("Requisição respondida pela instância executando na porta %s", porta);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarPedido(@PathVariable Long id) {
-        service.deletarPedido(id);
-
-        return ResponseEntity.noContent().build();
+    @PostMapping("/{id}/cancelar")
+    public ResponseEntity<Void> cancelarPedido(@PathVariable Long id) {
+        service.cancelarPedido(id);
+        return ResponseEntity.ok().build();
     }
 
 }

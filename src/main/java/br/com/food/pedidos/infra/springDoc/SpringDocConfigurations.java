@@ -50,6 +50,11 @@ public class SpringDocConfigurations {
                         .addResponses("NotFound", new ApiResponse()
                                 .description("Recurso não encontrado")
                                 .content(new Content().addMediaType("application/json",
-                                        new MediaType().schema(new Schema<>().$ref("#/components/schemas/ErrorResponse"))))));
+                                        new MediaType().schema(new Schema<>().$ref("#/components/schemas/ErrorResponse")))))
+
+                        .addResponses("UnprocessableEntity", new ApiResponse()
+                                .description("Conflito com o estado atual do recurso")
+                                .content(new Content().addMediaType("application/json",
+                                    new MediaType().schema(new Schema<>().$ref("#/components/schemas/ErrorResponse"))))));
     }
 }

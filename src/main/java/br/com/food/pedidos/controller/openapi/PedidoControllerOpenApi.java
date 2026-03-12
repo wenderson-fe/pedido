@@ -53,10 +53,11 @@ public interface PedidoControllerOpenApi {
     @Operation(summary = "Endpoint de diagnóstico para verificar a porta da instância", hidden = true)
     String retornaPorta(String porta);
 
-    @Operation(summary = "Exclui um pedido definitivamente")
+    @Operation(summary = "Cancela um pedido")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Pedido removido com sucesso"),
-            @ApiResponse(responseCode = "404", ref = "NotFound")
+            @ApiResponse(responseCode = "200", description = "Pedido cancelado com sucesso"),
+            @ApiResponse(responseCode = "404", ref = "NotFound"),
+            @ApiResponse(responseCode = "422", ref = "UnprocessableEntity")
     })
-    ResponseEntity<Void> deletarPedido(@Parameter(description = "ID do pedido") Long id);
+    ResponseEntity<Void> cancelarPedido(@Parameter(description = "ID do pedido") Long id);
 }
