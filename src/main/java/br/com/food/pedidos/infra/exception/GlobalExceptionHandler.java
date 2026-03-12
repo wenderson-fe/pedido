@@ -26,11 +26,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> tratarErroDeArgumento(IllegalArgumentException e) {
-        String mensagem = (e.getMessage() == null || e.getMessage().isBlank())
-                ? "Recurso não encontrado" : e.getMessage();
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ErrorResponse.detalhesDoErro(400, LocalDateTime.now(), mensagem));
+                .body(ErrorResponse.detalhesDoErro(400, LocalDateTime.now(), e.getMessage()));
     }
 
     @ExceptionHandler(PedidoException.class)
