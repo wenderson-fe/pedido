@@ -13,8 +13,11 @@ import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 public class SpringDocConfigurations {
@@ -29,6 +32,8 @@ public class SpringDocConfigurations {
                 .resolveAsResolvedSchema(new AnnotatedType(ErrorValidationDetails.class));
 
         return new OpenAPI()
+                .servers(List.of(
+                        new Server().url("http://localhost:8080/pedidos-api").description("Gateway Server")))
                 .info(new Info()
                         .title("pedidos-api")
                         .description("Serviço de pedidos. " +
