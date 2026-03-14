@@ -1,4 +1,4 @@
-package br.com.food.pedidos.dto;
+package br.com.food.pedidos.dto.response;
 
 import br.com.food.pedidos.model.Pedido;
 import br.com.food.pedidos.model.Status;
@@ -6,18 +6,18 @@ import br.com.food.pedidos.model.Status;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record PedidoDto(
+public record PedidoResponseDto(
         Long id,
         LocalDateTime dataHora,
         Status status,
-        List<ItemDoPedidoDto> itens
+        List<ItemDoPedidoResponseDto> itens
 ) {
-    public static PedidoDto fromEntity(Pedido pedido) {
-        return new PedidoDto(
+    public static PedidoResponseDto fromEntity(Pedido pedido) {
+        return new PedidoResponseDto(
                 pedido.getId(),
                 pedido.getDataHora(),
                 pedido.getStatus(),
-                ItemDoPedidoDto.fromEntity(pedido.getItens())
+                ItemDoPedidoResponseDto.fromEntity(pedido.getItens())
         );
     }
 }

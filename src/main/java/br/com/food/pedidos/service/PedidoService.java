@@ -1,8 +1,8 @@
 package br.com.food.pedidos.service;
 
-import br.com.food.pedidos.dto.PedidoCriacaoDto;
-import br.com.food.pedidos.dto.PedidoDto;
-import br.com.food.pedidos.dto.StatusDto;
+import br.com.food.pedidos.dto.request.PedidoRequestDto;
+import br.com.food.pedidos.dto.response.PedidoResponseDto;
+import br.com.food.pedidos.dto.request.StatusDto;
 import br.com.food.pedidos.infra.http.PagamentoClient;
 import br.com.food.pedidos.model.ItemDoPedido;
 import br.com.food.pedidos.model.Pedido;
@@ -29,21 +29,21 @@ public class PedidoService {
     private final PedidoRepository repository;
     private final PagamentoClient pagamentoClient;
 
-    public List<PedidoDto> obterTodos() {
+    public List<PedidoResponseDto> obterTodos() {
         return repository.findAll().stream()
-                .map(PedidoDto::fromEntity)
+                .map(PedidoResponseDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
-    public PedidoDto obterPorId(Long id) {
+    public PedidoResponseDto obterPorId(Long id) {
         Pedido pedido = repository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
-        return PedidoDto.fromEntity(pedido);
+        return PedidoResponseDto.fromEntity(pedido);
     }
 
     @Transactional
-    public PedidoDto criarPedido(PedidoCriacaoDto pedidoDto) {
+    public PedidoResponseDto criarPedido(PedidoRequestDto pedidoDto) {
         if (pedidoDto.itens() == null || pedidoDto.itens().isEmpty()) {
             throw new PedidoException("Não é possível criar um pedido sem itens!");
         }
@@ -55,16 +55,16 @@ public class PedidoService {
         Pedido pedido = new Pedido(Status.REALIZADO, itens);
         Pedido pedidoSalvo = repository.save(pedido);
 
-        return PedidoDto.fromEntity(pedidoSalvo);
+        return PedidoResponseDto.fromEntity(pedidoSalvo);
     }
 
     @Transactional
-    public PedidoDto atualizaStatus(Long id, StatusDto dto) {
+    public PedidoResponseDto atualizaStatus(Long id, StatusDto dto) {
         Pedido pedido = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado com id: " + id));
 
         pedido.setStatus(Status.fromString(dto.status()));
-        return PedidoDto.fromEntity(pedido);
+        return PedidoResponseDto.fromEntity(pedido);
     }
 
     @Transactional

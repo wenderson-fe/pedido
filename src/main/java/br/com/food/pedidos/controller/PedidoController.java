@@ -1,9 +1,9 @@
 package br.com.food.pedidos.controller;
 
 import br.com.food.pedidos.controller.openapi.PedidoControllerOpenApi;
-import br.com.food.pedidos.dto.PedidoCriacaoDto;
-import br.com.food.pedidos.dto.PedidoDto;
-import br.com.food.pedidos.dto.StatusDto;
+import br.com.food.pedidos.dto.request.PedidoRequestDto;
+import br.com.food.pedidos.dto.response.PedidoResponseDto;
+import br.com.food.pedidos.dto.request.StatusDto;
 import br.com.food.pedidos.service.PedidoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +23,20 @@ public class PedidoController implements PedidoControllerOpenApi{
     private PedidoService service;
 
     @GetMapping()
-    public List<PedidoDto> listarTodos() {
+    public List<PedidoResponseDto> listarTodos() {
         return service.obterTodos();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoDto> listarPorId(@PathVariable Long id) {
-        PedidoDto dto = service.obterPorId(id);
+    public ResponseEntity<PedidoResponseDto> listarPorId(@PathVariable Long id) {
+        PedidoResponseDto dto = service.obterPorId(id);
 
         return ResponseEntity.ok(dto);
     }
 
     @PostMapping()
-    public ResponseEntity<PedidoDto> realizaPedido(@RequestBody @Valid PedidoCriacaoDto dto, UriComponentsBuilder uriBuilder) {
-        PedidoDto pedidoRealizado = service.criarPedido(dto);
+    public ResponseEntity<PedidoResponseDto> realizaPedido(@RequestBody @Valid PedidoRequestDto dto, UriComponentsBuilder uriBuilder) {
+        PedidoResponseDto pedidoRealizado = service.criarPedido(dto);
 
         URI endereco = uriBuilder.path("/pedidos/{id}").buildAndExpand(pedidoRealizado.id()).toUri();
 
@@ -45,7 +45,7 @@ public class PedidoController implements PedidoControllerOpenApi{
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<PedidoDto> atualizaStatus(@PathVariable Long id, @RequestBody @Valid StatusDto status) {
+    public ResponseEntity<PedidoResponseDto> atualizaStatus(@PathVariable Long id, @RequestBody @Valid StatusDto status) {
         return ResponseEntity.ok(service.atualizaStatus(id, status));
     }
 

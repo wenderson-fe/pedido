@@ -1,4 +1,4 @@
-package br.com.food.pedidos.dto;
+package br.com.food.pedidos.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 
