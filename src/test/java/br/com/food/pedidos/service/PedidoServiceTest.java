@@ -2,6 +2,7 @@ package br.com.food.pedidos.service;
 
 import br.com.food.pedidos.dto.request.ItemDoPedidoRequestDto;
 import br.com.food.pedidos.dto.request.PedidoRequestDto;
+import br.com.food.pedidos.dto.request.StatusDto;
 import br.com.food.pedidos.dto.response.ItemDoPedidoResponseDto;
 import br.com.food.pedidos.dto.response.PedidoResponseDto;
 import br.com.food.pedidos.infra.http.PagamentoClient;
@@ -10,6 +11,7 @@ import br.com.food.pedidos.model.Pedido;
 import br.com.food.pedidos.model.Status;
 import br.com.food.pedidos.model.exception.PedidoException;
 import br.com.food.pedidos.repository.PedidoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -93,6 +96,35 @@ class PedidoServiceTest {
 
         // Garante que o pedido enviado ao repository esteja com status REALIZADO.
         assertEquals(Status.REALIZADO, pedidoEnviadoParaSalvar.getStatus());
+    }
+
+    @Test
+    @DisplayName("Deve disparar exception quando pedido não existir")
+    void deveDispararExceptionIdInvalido() {
+        Long id = 1L;
+        StatusDto novoStatus = new StatusDto("Cancelado");
+        when(repository.findById(id)).thenReturn(Optional.empty());
+
+        EntityNotFoundException ex = assertThrows(
+                EntityNotFoundException.class,
+                () -> service.atualizaStatus(id, novoStatus));
+
+        assertEquals(
+                "Pedido não encontrado com id: " + id,
+                ex.getMessage());
+        verify(repository, times(1)).findById(id);
+    }
+
+    @Test
+    @DisplayName("Deve atualizar o status do pedido quando informações estiverem corretas")
+    void deveAtualizarStatus() {
+        StatusDto novoStatus = new StatusDto("Cancelado");
+        Pedido pedido = criaPedido();
+        when(repository.findById(pedido.getId())).thenReturn(Optional.of(pedido));
+
+        PedidoResponseDto response = service.atualizaStatus(pedido.getId(), novoStatus);
+
+        assertEquals(Status.CANCELADO, response.status());
     }
 
     PedidoRequestDto criaPedidoRequest(List<ItemDoPedidoRequestDto> itens) {
